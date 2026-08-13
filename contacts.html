@@ -1,30 +1,276 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-<title>Contacts - Starson ViewBoost☑️</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>⭐ Starson ViewBoost☑️ Contacts</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,sans-serif;
+}
+
+body{
+background:#050816;
+color:white;
+padding:20px;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.card{
+background:#0f172a;
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+background:#111827;
+border:none;
+border-radius:10px;
+color:white;
+}
+
+button{
+padding:12px 18px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+margin-top:10px;
+}
+
+.add-btn{
+background:#8b5cf6;
+color:white;
+}
+
+.delete-btn{
+background:#ef4444;
+color:white;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+padding:12px;
+text-align:left;
+border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+th{
+background:#111827;
+}
+
+.counter{
+font-size:18px;
+font-weight:bold;
+color:#8b5cf6;
+}
+
+.search{
+margin-top:15px;
+}
+
+</style>
 </head>
 <body>
-<h1>Contacts Management</h1>
 
-<input type="text" placeholder="Search contact...">
+<div class="container">
 
-<table border="1">
+<div class="header">
+<h1>⭐ Starson ViewBoost☑️ Contacts</h1>
+<div class="counter">
+Total Contacts: <span id="total">0</span>
+</div>
+</div>
+
+<div class="card">
+
+<h3>Add New Contact</h3>
+
+<input
+type="text"
+id="name"
+placeholder="Contact Name">
+
+<input
+type="text"
+id="phone"
+placeholder="+509xxxxxxxx">
+
+<button
+class="add-btn"
+onclick="saveContact()">
+Add Contact
+</button>
+
+</div>
+
+<div class="card">
+
+<input
+class="search"
+type="text"
+id="search"
+placeholder="Search Contact..."
+onkeyup="searchContact()">
+
+<table>
+
+<thead>
 <tr>
 <th>Name</th>
 <th>Phone</th>
 <th>Action</th>
 </tr>
+</thead>
 
-<tr>
-<td>John Doe</td>
-<td>+50912345678</td>
-<td>
-<button>Edit</button>
-<button>Delete</button>
-</td>
-</tr>
+<tbody id="contactList"></tbody>
 
 </table>
 
+</div>
+
+</div>
+
+<script>
+
+function saveContact(){
+
+let name =
+document.getElementById("name").value.trim();
+
+let phone =
+document.getElementById("phone").value.trim();
+
+if(name === "" || phone === ""){
+alert("Fill all fields");
+return;
+}
+
+let contacts =
+JSON.parse(localStorage.getItem("contacts")) || [];
+
+contacts.push({
+name:name,
+phone:phone
+});
+
+localStorage.setItem(
+"contacts",
+JSON.stringify(contacts)
+);
+
+document.getElementById("name").value="";
+document.getElementById("phone").value="";
+
+loadContacts();
+
+}
+
+function loadContacts(){
+
+let contacts =
+JSON.parse(localStorage.getItem("contacts")) || [];
+
+let table =
+document.getElementById("contactList");
+
+table.innerHTML="";
+
+contacts.forEach((contact,index)=>{
+
+table.innerHTML += `
+<tr>
+<td>${contact.name}</td>
+<td>${contact.phone}</td>
+<td>
+<button
+class="delete-btn"
+onclick="deleteContact(${index})">
+Delete
+</button>
+</td>
+</tr>
+`;
+
+});
+
+document.getElementById("total").innerText =
+contacts.length;
+
+}
+
+function deleteContact(index){
+
+let contacts =
+JSON.parse(localStorage.getItem("contacts")) || [];
+
+if(confirm("Delete this contact ?")){
+
+contacts.splice(index,1);
+
+localStorage.setItem(
+"contacts",
+JSON.stringify(contacts)
+);
+
+loadContacts();
+
+}
+
+}
+
+function searchContact(){
+
+let filter =
+document.getElementById("search")
+.value.toLowerCase();
+
+let rows =
+document.querySelectorAll("#contactList tr");
+
+rows.forEach(row=>{
+
+let text =
+row.innerText.toLowerCase();
+
+row.style.display =
+text.includes(filter)
+? ""
+: "none";
+
+});
+
+}
+
+window.onload = loadContacts;
+
+</script>
+
 </body>
-</html>
+  </html>
