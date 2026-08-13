@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>VCF Generator</title>
+</head>
+<body>
+
+<h1>VCF Generator</h1>
+
+<textarea id="contacts" rows="10" cols="50"
+placeholder="Name,Phone"></textarea>
+
+<br><br>
+
+<button onclick="generateVCF()">
+Generate VCF
+</button>
+
+<script>
+function generateVCF(){
+
+let text =
+document.getElementById("contacts").value;
+
+alert("VCF Generated");
+
+}
+</script>
+
+</body>
+</html>
